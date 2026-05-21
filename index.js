@@ -7,23 +7,31 @@ console.log(uRole)
 
 
 const logoutBtn = document.querySelector(".logout-btn");
-logoutBtn.addEventListener("click",()=>{
+logoutBtn.addEventListener("click", () => {
     localStorage.removeItem("currentUser");
     window.location.href = "./login/login.html";
 });
 
 
 const createbtn = document.querySelector(".create-btn");
-createbtn.addEventListener("click",()=>{
+createbtn.addEventListener("click", () => {
     window.location.href = "./createPage/create.html";
 })
 
-const clicktbody = document.getElementById("purchase-order-list");
-clicktbody.addEventListener("click",()=>{
-    window.location.href = "./detailPage/productdt.html";
-})
 
-// //lấy orders 
+
+const tbody = document.getElementById("purchase-order-list");
+tbody.addEventListener("click", (e) => {
+    //lấy hàng tr  gần nhất với index 
+    const row = e.target.closest("tr");
+    if(row){
+        const orderId = row.dataset.id; // ko biet dung sai
+        window.location.href = `./detailPage/detail.html?id=${orderId}`;
+    }
+});
+
+
+// //lấy orders
 // const orders = JSON.parse(localStorage.getItem("ImportOrders")) || [];
 
 // // lấy toàn bộ tbody bao gồm đơn

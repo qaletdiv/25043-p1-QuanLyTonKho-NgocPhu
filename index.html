@@ -24,7 +24,7 @@
                     <a href="#" class="nav-item"> Sản phẩm </a>
                     <a href="#" class="nav-item"> Nhà cung cấp </a>
                     <a href="#" class="nav-item"> Tồn kho</a>
-                    <a href="#" class="nav-item"> Profile</a>
+                    <a href="./profile/profilepage.html" class="nav-item"> Profile</a>
                 </nav>
             </div>
         </aside>
@@ -44,9 +44,9 @@
             </header>
             <section class="filter-section">
                 <div class="filter-group">
-                    <input type="text" placeholder="Mã đơn hàng">
-                    <input type="text" placeholder="Tên nhà cung cấp">
-                    <button class="search-btn">Tìm kiếm</button>
+                    <input type="text" id="search-order-id" placeholder="Mã đơn hàng">
+                    <input type="text" id="search-order-supplier" placeholder="Tên nhà cung cấp">
+                    <button class="search-btn" id="search-btn">Tìm kiếm</button>
                 </div>
                 <button class="create-btn">Tạo mới</button>
             </section>
@@ -76,45 +76,65 @@
                         </tr>
                     </tbody>
                     <script>
-                        //lấy orders 
                         const orders = JSON.parse(localStorage.getItem("ImportOrders")) || [];
+                        const suppliers = JSON.parse(localStorage.getItem("Suppliers")) || [];
+                        const searchBtn = document.getElementById("search-btn");
                         const tbody = document.getElementById("purchase-order-list");
-                        if (!orders) {
-                            tbody.innerHTML = `<p>no purchases founded!!</p>`;
-                        } else {
+                        
+                        function renderOrders(orderList) {
                             tbody.innerHTML = "";
-                            orders.forEach(order => {
-                                tbody.innerHTML += `
+                            if (orderList.length === 0) {
+                                tbody.innerHTML = `
                                 <tr>
-
-                                    <td>${order.Id}</td>
-
-                                    <td>${order.supplierId}</td>
-
-                                    <td>${order.create_at}</td>
-
-                                    <td>${order.create_by}</td>
-
-                                    <td>
-                                        ${order.cost.toLocaleString("vi-VN")}đ
-                                    </td>
-
-                                    <td>
-                                        <span class="status">
-                                            ${order.status}
-                                        </span>
-                                    </td>
-
+                                    <td colspan="6">Không tìm thấy đơn hàng</td>
                                 </tr>`;
-                            });
+                                return;
+                            }
+                            orderList.forEach(order => {
+                                const supplier = suppliers.find(s => s.id === order.supplierId);
+                                tbody.innerHTML += `<tr>
+                                <td>${order.Id}</td>
+                                <td>
+                                    ${supplier ? supplier.name : "Không rõ"}
+                                </td>
+                                <td>${order.create_at}</td>
+                                <td>${order.create_by}</td>
+                                <td>
+                                    ${order.cost.toLocaleString("vi-VN")}đ
+                                </td>
+                                <td>
+                                    <span class="status">
+                                        ${order.status}
+                                    </span>
+                                </td>
+                            </tr>`;
+                        });
                         }
-
+                        renderOrders(orders);
+                        searchBtn.addEventListener("click", () => {
+                            const getID = document.getElementById("search-order-id").value
+                                .trim()
+                                .toLowerCase();
+                            const getSup = document.getElementById("search-order-supplier").value
+                                .trim()
+                                .toLowerCase();
+                            const filteredOrders = orders.filter(order => {
+                                //khi filter chạy sẽ duyệt từng orders [.., supplierId] => cần dòng này để tìm supplier
+                                const supplier = suppliers.find(
+                                    s => s.id === order.supplierId
+                                );
+                                const matchId = order.Id.toLowerCase().includes(getID);
+                                const matchSupplier = supplier? supplier.name.toLowerCase().includes(getSup): false;
+                                return matchId && matchSupplier;
+                            });
+                            renderOrders(filteredOrders);
+                        });
                     </script>
                 </table>
             </section>
         </main>
     </div>
-    <script src="./index.js"></script>
+    <script type="module" src="./index.js"></script>
 </body>
 
 </html>

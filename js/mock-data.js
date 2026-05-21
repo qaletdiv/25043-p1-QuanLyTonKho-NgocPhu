@@ -66,29 +66,6 @@ export const Images = [
 ];
 
 
-export const Suppliers = [
-    {
-        id: 1,
-        name: "Samsung Việt Nam",
-        address: "Hồ Chí Minh",
-        pn: "0909000111"
-    },
-
-    {
-        id: 2,
-        name: "Apple Việt Nam",
-        address: "Hà Nội",
-        pn: "0909222333"
-    },
-
-    {
-        id: 3,
-        name: "Dell Distributor",
-        address: "Đà Nẵng",
-        pn: "0909444555"
-    }
-];
-
 
 
 export const ImportOrders = [
@@ -133,6 +110,30 @@ export const ExportOrders = [
 ];
 
 
+export const Suppliers = [
+    {
+        id: 1,
+        name: "Samsung Việt Nam",
+        address: "Hồ Chí Minh",
+        pn: "0909000111"
+    },
+
+    {
+        id: 2,
+        name: "Apple Việt Nam",
+        address: "Hà Nội",
+        pn: "0909222333"
+    },
+
+    {
+        id: 3,
+        name: "Dell Distributor",
+        address: "Đà Nẵng",
+        pn: "0909444555"
+    }
+];
+
+
 export const ExportOrderDetails = [
     {
         Id: 1,
@@ -149,4 +150,8 @@ if (!localStorage.getItem("ImportOrders")) {
         "ImportOrders",
         JSON.stringify(ImportOrders)
     );
+}
+
+if (!localStorage.getItem("Suppliers")) {
+    localStorage.setItem("Suppliers",JSON.stringify(Suppliers));
 }
