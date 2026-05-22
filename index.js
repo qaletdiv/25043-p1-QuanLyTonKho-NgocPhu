@@ -9,13 +9,13 @@ console.log(uRole)
 const logoutBtn = document.querySelector(".logout-btn");
 logoutBtn.addEventListener("click", () => {
     localStorage.removeItem("currentUser");
-    window.location.href = "./login/login.html";
+    window.location.href = "./login/";
 });
 
 
 const createbtn = document.querySelector(".create-btn");
 createbtn.addEventListener("click", () => {
-    window.location.href = "./createPage/create.html";
+    window.location.href = "./create/";
 })
 
 
@@ -26,7 +26,7 @@ tbody.addEventListener("click", (e) => {
     const row = e.target.closest("tr");
     if(row){
         const orderId = row.dataset.id; // ko biet dung sai
-        window.location.href = `./detailPage/detail.html?id=${orderId}`;
+        window.location.href = `./detail/?id=${orderId}`;
     }
 });
 
