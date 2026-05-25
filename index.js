@@ -19,50 +19,13 @@ createbtn.addEventListener("click", () => {
 })
 
 
-
 const tbody = document.getElementById("purchase-order-list");
 tbody.addEventListener("click", (e) => {
     //lấy hàng tr  gần nhất với index 
     const row = e.target.closest("tr");
     if(row){
         const orderId = row.dataset.id; // ko biet dung sai
-        window.location.href = `./detail/?id=${orderId}`;
+        window.location.href = `./ImportOrders/?id=${orderId}`;
     }
 });
 
-
-// //lấy orders
-// const orders = JSON.parse(localStorage.getItem("ImportOrders")) || [];
-
-// // lấy toàn bộ tbody bao gồm đơn
-// const tbody = document.getElementById("purchase-order-list");
-// function renderOrders(data){
-//     tbody.innerHTML = "";
-//     data.forEach(order => {
-//         tbody.innerHTML += `
-//             <tr>
-
-//                 <td>${order.Id}</td>
-
-//                 <td>${order.supplierId}</td>
-
-//                 <td>${order.create_at}</td>
-
-//                 <td>${order.create_by}</td>
-
-//                 <td>
-//                     ${order.cost.toLocaleString("vi-VN")}đ
-//                 </td>
-
-//                 <td>
-//                     <span class="status">
-//                         ${order.status}
-//                     </span>
-//                 </td>
-
-//             </tr>
-//         `;
-//     });
-// }
-// //chạy hàm
-// renderOrders(orders);

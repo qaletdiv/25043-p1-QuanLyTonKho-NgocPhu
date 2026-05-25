@@ -42,7 +42,9 @@ body{
     align-items: center;
     gap: 0.8rem;
 }
-
+.logohrf {
+    text-decoration: none;
+}
 .logo{
     width: 3rem;
     height: 3rem;
@@ -97,6 +99,13 @@ body{
 
 .topbar p{
     color: #64748b;
+}
+
+.table-title{
+    margin-bottom: 0.6rem;
+    margin-left: 0.125rem;
+    padding: 0.25rem;
+    
 }
 
 .user-box{
@@ -233,7 +242,7 @@ tbody tr:hover{
 }
 
 
-@media(max-width: 64rem){
+@media screen and (max-width: 64rem){
     .dashboard{
         flex-direction: column;
     }
@@ -256,7 +265,7 @@ tbody tr:hover{
     }
 }
 
-@media(max-width: 48rem){
+@media screen and (max-width: 48rem){
 
     html{
         font-size: 14px;
