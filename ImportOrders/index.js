@@ -11,11 +11,13 @@ logout();
 const fullName = document.querySelector(".user-name");
 fullName.textContent = currentUser.fullName;
 
+const params = new URLSearchParams(window.location.search);
+const orderId = params.get("Id");
 
+const userRole = JSON.parse(localStorage.getItem("currentUser"));
 const suppliers = JSON.parse(localStorage.getItem("Suppliers")) || [];
 const select = document.getElementById("Supplier-options");
 function parseSup(optionList) {
-
     select.innerHTML = `
         <option value="">
             Chọn nhà cung cấp
@@ -52,31 +54,33 @@ const totalElement = document.getElementById("total-price");
 const prodctTb = document.getElementById('product-table-body');
 
 function renderProduct() {
+
+    const isReadonly = currentOrder && (currentOrder.status === "Confirmed" || currentOrder.status === "Imported");
     tableBody.innerHTML = "";
     orderProducts.forEach((product, index) => {
         const totalPrice = product.amounts * product.price;
-        //dung onchange de bat su kien khi thay doi du lieu
         tableBody.innerHTML += `
             <tr>
                 <td>
-                    <select onchange="changeProduct(${index}, this.value)">
+                    <select 
+                        onchange="changeProduct(${index}, this.value)" ${isReadonly ? "disabled" : ""}>
                         ${renderProductOptions(product.id)}
                     </select>
-                    </td>
-                    <td class="product-name">
-                        ${product.name}
-                    </td>
-                    <td>
-                        <input type="number" value="${product.amounts}" min="0" onchange="updateAmounts(${index}, this.value)">
-                    </td>
-                    <td>
-                        <input type="number" value="${product.price}" onchange="updatePrice(${index}, this.value)">
-                    </td>
-                    <td class="total-price">
-                        ${totalPrice.toLocaleString()}đ
-                    </td>
-                    <td>
-                    <button class="delete-btn" onclick="deleteProduct(${index})">
+                </td>
+                <td class="product-name"> ${product.name}
+                </td>
+                <td>
+                    <input type="number" value="${product.amounts}" min="1" onchange="updateAmounts(${index}, this.value)" 
+                    ${isReadonly ? "disabled" : ""} >
+                </td>
+                <td>
+                    <input type="number" value="${product.price}" onchange="updatePrice(${index}, this.value)" ${isReadonly ? "disabled" : ""} >
+                </td>
+                <td class="total-price">
+                    ${totalPrice.toLocaleString()}đ
+                </td>
+                <td>
+                    <button class="delete-btn" onclick="deleteProduct(${index})"  ${isReadonly ? "disabled" : ""}>
                         Xóa
                     </button>
                 </td>
@@ -107,7 +111,7 @@ addBtn.addEventListener('click', () => {
     orderProducts.push({
         id: "",
         name: "",
-        amounts: 0,
+        amounts: 1,
         price: 0
     });
     renderProduct();
@@ -146,7 +150,6 @@ window.deleteProduct = function (index) {
 
 //update tong tien don hang 
 function updateSummary() {
-
     let total = 0;
     orderProducts.forEach(item => {
         total += item.amounts * item.price;
@@ -155,32 +158,123 @@ function updateSummary() {
 }
 
 
+// ham tang id 
+function generateOrderid() {
+    const getId = JSON.parse(localStorage.getItem("ImportOrders")) || []
+    if (getId.length === 0) {
+        return 1;
+    }
+    // lấy id đơn hàng cuối +1 = id đơn mới
+    return getId[getId.length - 1].Id + 1;
+
+}
+
 const draftBtn = document.querySelector(".draft-btn");
 const confirmBtn = document.querySelector(".confirm-btn");
-const iconfirmBtn = document.querySelector(".confirm-btn");
+const iconfirmBtn = document.querySelector(".import-btn");
 const backToms = document.querySelector(".secondary-btn");
+const importOrder = JSON.parse(localStorage.getItem("ImportOrders")) || [];
 
-draftBtn.addEventListener('click',()=>{
+let currentOrder = importOrder.find(order => order.Id == orderId);
+
+if(currentOrder){
+    select.value = currentOrder.supplierId;
+    document.querySelector(".employee").value = currentOrder.create_by;
+    document.querySelector(".date-input").value = currentOrder.create_at;
+    document.querySelector(".note-input").value = currentOrder.comment;
+    orderProducts = currentOrder.products || [];
+    renderProduct();
+    if(currentOrder.status === "Confirmed" ||currentOrder.status === "Imported")
+    {
+        lockform();
+    }
+}
+
+
+// lưu lại
+draftBtn.addEventListener('click', (e) => {
+    e.preventDefault();
     //lay gia tri cua bang chung
-    const provider = select.value;
-    const employee = document.querySelector(".employee").value;
-    const dateInput = document.querySelector(".date-input").value;
-    const noteInput = document.querySelector(".note-input").value;
+    const supplierId = select.value;
+    const create_by = document.querySelector(".employee").value;
+    const create_at = document.querySelector(".date-input").value;
+    const comment = document.querySelector(".note-input").value;
 
     // kiem tra xem co du ko
-    if(!provider||!employee||!dateInput){
+    if (!supplierId || !create_by || !create_at) {
         alert("vui long nhap day du thong tin");
         return;
     }
     // kiem tra muc dssp
-    if(orderProducts.length  == 0){
+    if (orderProducts.length == 0) {
         alert("vui long chon san pham");
         return;
     }
-    
+    let cost = 0;
+    orderProducts.forEach(item => {
+        cost += item.amounts * item.price;
+    });
 
+    let amounts = 0;
+    orderProducts.forEach(item => {
+        amounts += item.amounts;
+    });
+
+    const order = {
+        Id: generateOrderid(),
+        products: orderProducts,
+        amounts,
+        supplierId: Number(supplierId),
+        cost,
+        create_by,
+        create_at,
+        comment,
+        status: "Draft",
+    }
+
+    importOrder.push(order);
+    localStorage.setItem("ImportOrders", JSON.stringify(importOrder))   
+    currentOrder = order;
+    alert("Lưu đơn hàng thành công");
 })
 
-backToms.addEventListener('click',()=>{
-    window.location.href = "../" ;
+
+function lockform() {
+
+    document.querySelector(".employee").disabled = true;
+    document.querySelector(".date-input").disabled = true;
+    document.querySelector(".note-input").disabled = true;
+    select.disabled = true;
+    addBtn.disabled = true;
+    draftBtn.disabled = true;
+    confirmBtn.disabled = true;
+}
+
+
+//nut xac nhan don hang
+confirmBtn.addEventListener('click', (e) => {
+    e.preventDefault();
+    if (!currentOrder) {
+        alert("Không tìm thấy đơn hàng");
+        return;
+    }
+    if (currentOrder.status !== "Draft") {
+        alert("Chỉ xác nhận đơn nháp");
+        return;
+    }
+
+    currentOrder.status = "Confirmed";
+    localStorage.setItem(
+        "ImportOrders",
+        JSON.stringify(importOrder)
+    );
+    lockform();
+    renderProduct();
+    alert("Xác nhận đơn hàng thành công");
+});
+//nut xac nhan nhap kho
+
+//nut quay lai
+backToms.addEventListener('click', () => {
+    window.location.href = "../";
 })

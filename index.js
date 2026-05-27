@@ -26,7 +26,7 @@ function renderOrders(orderList) {
     }
     orderList.forEach(order => {
         const supplier = suppliers.find(s => s.id === order.supplierId);
-        tbody.innerHTML +=`<tr>
+        tbody.innerHTML +=`<tr data-id="${order.Id}">
                             <td>${order.Id}</td>
                             <td>
                                 ${supplier ? supplier.name : "Không rõ"}
@@ -45,6 +45,8 @@ function renderOrders(orderList) {
     });
 }
 renderOrders(orders);
+
+//tim kiem
 searchBtn.addEventListener("click", () => {
     const getID = document.getElementById("search-order-id").value
         .trim()
@@ -53,7 +55,7 @@ searchBtn.addEventListener("click", () => {
         .trim()
         .toLowerCase();
     const filteredOrders = orders.filter(order => {
-        //khi filter chạy sẽ duyệt từng orders [.., supplierId] => cần dòng này để tìm supplier
+        //khi filter chạy sẽ duyệt từng orders [.., supplierId] =>  tìm supplier
         const supplier = suppliers.find(
             s => s.id === order.supplierId
         );
@@ -67,7 +69,7 @@ searchBtn.addEventListener("click", () => {
 
 const createbtn = document.querySelector(".create-btn");
 createbtn.addEventListener("click", () => {
-    window.location.href = "./create/";
+    window.location.href = "./ImportOrders/";
 })
 
 
@@ -78,7 +80,7 @@ function redirbyClick() {
         const row = e.target.closest("tr");
         if (row) {
             const orderId = row.dataset.id; // ko biet dung sai
-            window.location.href = `./ImportOrders/?id=${orderId}`;
+            window.location.href = `./ImportOrders/?Id=${orderId}`;
         }
     });
 }

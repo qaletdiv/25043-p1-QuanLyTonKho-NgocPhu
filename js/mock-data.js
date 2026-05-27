@@ -70,7 +70,7 @@ export const Images = [
 
 export const ImportOrders = [
     {
-        Id: "PO001",
+        Id: 1,
         productId: 1,
         amounts: 5,
         supplierId: 3,
@@ -83,7 +83,7 @@ export const ImportOrders = [
         update_by: "Admin"
     },
     {
-        Id: "PO002",
+        Id: 2,
         productId: 2,
         amounts: 3,
         supplierId: 2,
@@ -101,7 +101,7 @@ export const ImportOrders = [
 
 export const ExportOrders = [
     {
-        Id: "EX001",
+        Id: 1,
         productId: 1,
         amount: 2,
         total_price: 70000000,
