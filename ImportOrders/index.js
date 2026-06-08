@@ -17,6 +17,7 @@ const orderId = params.get("Id");
 const userRole = JSON.parse(localStorage.getItem("currentUser"));
 const suppliers = JSON.parse(localStorage.getItem("Suppliers")) || [];
 const select = document.getElementById("Supplier-options");
+
 function parseSup(optionList) {
     select.innerHTML = `
         <option value="">
@@ -43,8 +44,6 @@ function parseSup(optionList) {
 parseSup(suppliers);
 
 
-
-
 const products = JSON.parse(localStorage.getItem("Products")) || [];
 let orderProducts = [];
 
@@ -58,15 +57,16 @@ function renderProduct() {
     tableBody.innerHTML = "";
     orderProducts.forEach((product, index) => {
         const totalPrice = product.amounts * product.price;
+        const productInfo = products.find(p => p.id == product.productId);
         tableBody.innerHTML += `
             <tr>
                 <td>
                     <select 
                         onchange="changeProduct(${index}, this.value)" ${isReadonly ? "disabled" : ""}>
-                        ${renderProductOptions(product.id)}
+                        ${renderProductOptions(product.productId)}
                     </select>
                 </td>
-                <td class="product-name"> ${product.name}
+                <td class="product-name"> ${productInfo ? productInfo.name : ""}
                 </td>
                 <td>
                     <input type="number" value="${product.amounts}" min="1" onchange="updateAmounts(${index}, this.value)" 
@@ -92,24 +92,32 @@ function renderProduct() {
 function renderProductOptions(selectedId) {
     //option rong = chon san pham 
     // dung map() de duyet tung phan tu trong mang products
-    return `
+    if (!selectedId) {
+        return `
         <option value="">
             Chọn sản phẩm
         </option>
-    
         ${products.map(product => `
+            <option value="${product.id}" ${product.id == selectedId ? "selected" : ""}>
+                ${product.id}
+            </option>
+        `).join("")}`
+    }
+    else if (selectedId || currentOrder) {
+        return `
+       ${products.map(product => `
             <option value="${product.id}" ${product.id == selectedId ? "selected" : ""}>
                 ${product.id}
             </option>
         `).join("")}
     `;
-    // dung join de khi map xong thi gop mang string lai nham bo dau , trong mang
+        // dung join de khi map xong thi gop mang string lai nham bo dau , trong mang
+    }
 }
 
 addBtn.addEventListener('click', () => {
     orderProducts.push({
-        id: "",
-        name: "",
+        productId: "",
         amounts: 1,
         price: 0
     });
@@ -120,8 +128,7 @@ window.changeProduct = function (index, productId) {
     const selectedProduct = products.find(product => product.id == productId);
     if (!selectedProduct)
         return;
-    orderProducts[index].id = selectedProduct.id;
-    orderProducts[index].name = selectedProduct.name;
+    orderProducts[index].productId = selectedProduct.id;
     orderProducts[index].price = selectedProduct.price;
     renderProduct();
 }
@@ -155,17 +162,6 @@ function updateSummary() {
 }
 
 
-// ham tang id 
-function generateOrderid() {
-    const getId = JSON.parse(localStorage.getItem("ImportOrders")) || []
-    if (getId.length === 0) {
-        return 1;
-    }
-    // lấy id đơn hàng cuối +1 = id đơn mới
-    return getId[getId.length - 1].Id + 1;
-}
-
-
 const draftBtn = document.querySelector(".draft-btn");
 const confirmBtn = document.querySelector(".confirm-btn");
 const iconfirmBtn = document.querySelector(".import-btn");
@@ -174,15 +170,14 @@ const importOrder = JSON.parse(localStorage.getItem("ImportOrders")) || [];
 
 
 let currentOrder = importOrder.find(order => order.Id == orderId);
-if(currentOrder){
+if (currentOrder) {
     select.value = currentOrder.supplierId;
     document.querySelector(".employee").value = currentOrder.create_by;
     document.querySelector(".date-input").value = currentOrder.create_at;
     document.querySelector(".note-input").value = currentOrder.comment;
     orderProducts = currentOrder.products || [];
     renderProduct();
-    if(currentOrder.status === "Confirmed" ||currentOrder.status === "Imported")
-    {
+    if (currentOrder.status === "Confirmed" || currentOrder.status === "Imported") {
         lockform();
     }
 }
@@ -207,6 +202,13 @@ draftBtn.addEventListener('click', (e) => {
         alert("vui long chon san pham");
         return;
     }
+
+    const invalidProduct =orderProducts.some(item => !item.productId);
+    if (invalidProduct) {
+        alert("Vui lòng chọn đầy đủ sản phẩm");
+        return;
+    }
+
     let cost = 0;
     orderProducts.forEach(item => {
         cost += item.amounts * item.price;
@@ -218,8 +220,8 @@ draftBtn.addEventListener('click', (e) => {
     });
 
     const order = {
-        Id: generateOrderid(),
-        products: orderProducts,
+        Id: Date.now(),
+        products: [...orderProducts],
         amounts,
         supplierId: Number(supplierId),
         cost,
@@ -228,9 +230,8 @@ draftBtn.addEventListener('click', (e) => {
         comment,
         status: "Draft",
     }
-
     importOrder.push(order);
-    localStorage.setItem("ImportOrders", JSON.stringify(importOrder))   
+    localStorage.setItem("ImportOrders", JSON.stringify(importOrder))
     currentOrder = order;
     alert("Lưu đơn hàng thành công");
 })
@@ -261,10 +262,7 @@ confirmBtn.addEventListener('click', (e) => {
     }
 
     currentOrder.status = "Confirmed";
-    localStorage.setItem(
-        "ImportOrders",
-        JSON.stringify(importOrder)
-    );
+    localStorage.setItem("ImportOrders", JSON.stringify(importOrder));
     lockform();
     renderProduct();
     alert("Xác nhận đơn hàng thành công");
@@ -288,18 +286,16 @@ iconfirmBtn.addEventListener("click", (e) => {
     // cộng tồn kho
     currentOrder.products.forEach(orderItem => {
 
-        const product = products.find(item => item.id == orderItem.id);
-        if (product){
+        const product = products.find(item => item.id == orderItem.productId);
+        if (product) {
             product.stock += orderItem.amounts;
         }
     });
 
     // cập nhật trạng thái
     currentOrder.status = "Imported";
-
     // lưu lại vào product
-    localStorage.setItem("Products",JSON.stringify(products));
-
+    localStorage.setItem("Products", JSON.stringify(products));
     // lưu lại trạng thái
     localStorage.setItem("ImportOrders", JSON.stringify(importOrder));
     lockform();

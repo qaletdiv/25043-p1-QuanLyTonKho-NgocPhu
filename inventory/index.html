@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tra cứu tồn kho</title>
+    <link rel="stylesheet" href="./style.css">
+    <script type="module" src="../js/mock-data.js"></script>
+</head>
+
+<body>
+    <div id="global-header"></div>
+    <div class="dashboard">
+        <div id="global-sidebar"></div>
+        <main class="main-content">
+            <header class="page-header">
+                <h1>Tra cứu tồn kho</h1>
+                <p>Kiểm tra số lượng tồn kho sản phẩm</p>
+            </header>
+            <section class="search-card">
+                <div class="search-group">
+                    <input type="text" id="keyword" placeholder="Nhập mã hoặc tên sản phẩm">
+                    <button id="search-btn">
+                        Tìm kiếm
+                    </button>
+                </div>
+            </section>
+
+            <section class="table-card">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Mã sản phẩm</th>
+                            <th>Tên sản phẩm</th>
+                            <th>Tồn kho</th>
+                        </tr>
+                    </thead>
+                    <tbody id="inventory-list">
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                    </tbody>
+                </table>
+            </section>
+        </main>
+    </div>
+    <div id="global-footer"></div>
+    <script src="../js/main.js"></script>
+    <script type="module" src="./stock.js"></script>
+</body>
+</html>

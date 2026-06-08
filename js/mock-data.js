@@ -16,10 +16,11 @@ export const Products = [
         id: 1,
         name: "Laptop Dell XPS 15",
         price: 35000000,
-        amounts: 15,
+        unit: "cái",
         create_at: "2026-05-20",
         create_by: "Admin",
-        stock: 10
+        stock: 10,
+        supplierId:1,
     },
 
     {
@@ -27,53 +28,30 @@ export const Products = [
         name: "iPhone 16 Pro Max",
         price: 42000000,
         unit: "Chiếc",
-        amounts: 10,
         create_at: "2026-05-20",
         create_by: "Admin",
-        stock: 10
+        stock: 10,
+        supplierId:2,
     },
 
     {
         id: 3,
         name: "Samsung SSD 1TB",
         price: 2800000,
-        unit: "Ổ",
-        amounts: 30,
+        unit: "cai",
         create_at: "2026-05-20",
         create_by: "warehouse01",
-        stock: 10
+        stock: 10,
+        supplierId:2,
     }
 ];
-
-
-
-export const Images = [
-    {
-        id: 1,
-        productId: 1,
-        image_body: "../assets/images/dell-xps.png"
-    },
-
-    {
-        id: 2,
-        productId: 2,
-        image_body: "../assets/images/iphone16.png"
-    },
-
-    {
-        id: 3,
-        productId: 3,
-        image_body: "../assets/images/ssd.png"
-    }
-];
-
 
 
 
 export const ImportOrders = [
     {
         Id: 1,
-        productId: 1,
+        products: [{productId:1,amounts:5 ,price: 1200}],
         amounts: 5,
         supplierId: 3,
         cost: 175000000,
@@ -86,7 +64,7 @@ export const ImportOrders = [
     },
     {
         Id: 2,
-        productId: 2,
+        products: [{productId:2,amounts:3,price: 10000}],
         amounts: 3,
         supplierId: 2,
         cost: 175000000,
@@ -100,18 +78,6 @@ export const ImportOrders = [
 ];
 
 
-
-export const ExportOrders = [
-    {
-        Id: 1,
-        productId: 1,
-        amount: 2,
-        total_price: 70000000,
-        status: "Completed",
-        create_at: "2026-05-21",
-        create_by: "warehouse01"
-    }
-];
 
 
 export const Suppliers = [
@@ -138,15 +104,6 @@ export const Suppliers = [
 ];
 
 
-export const ExportOrderDetails = [
-    {
-        Id: 1,
-        exportorderId: "EX001",
-        productId: 1,
-        amount: 2,
-        price: 35000000
-    }
-];
 
 
 if (!localStorage.getItem("ImportOrders")) {

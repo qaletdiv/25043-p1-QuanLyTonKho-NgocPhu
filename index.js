@@ -48,9 +48,7 @@ renderOrders(orders);
 
 //tim kiem
 searchBtn.addEventListener("click", () => {
-    const getID = document.getElementById("search-order-id").value 
-        .trim();
-    const getSup = document.getElementById("search-order-supplier").value
+    const getKey = document.getElementById("search-order").value 
         .trim()
         .toLowerCase();
     const filteredOrders = orders.filter(order => {
@@ -60,9 +58,9 @@ searchBtn.addEventListener("click", () => {
         );
 
         //id là số => ép san chuỗi
-        const matchId = getID === "" ||String(order.Id).includes(getID);
-        const matchSupplier =  supplier ? supplier.name.toLowerCase().includes(getSup) : false;
-        return matchId && matchSupplier;
+        const matchId  = "" ||String(order.Id).includes(getKey);
+        const matchSupplier =  supplier ? supplier.name.toLowerCase().includes(getKey) : false;
+        return getKey === "" || matchId || matchSupplier;
     });
     renderOrders(filteredOrders);
 });

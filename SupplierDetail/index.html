@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chi tiết nhà cung cấp</title>
+    <link rel="stylesheet" href="./style.css">
+</head>
+
+<body>
+
+    <div id="global-header"></div>
+    <div class="dashboard">
+
+        <div id="global-sidebar"></div>
+        <main class="main-content">
+
+            <header class="page-header">
+                <h1>Thông tin nhà cung cấp</h1>
+                <p>Tạo mới hoặc chỉnh sửa nhà cung cấp</p>
+            </header>
+
+            <section class="form-card">
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label>
+                            Tên nhà cung cấp
+                            <span class="required">*</span>
+                        </label>
+                        <input type="text" id="supplier-name" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label>
+                            Số điện thoại
+                            <span class="required">*</span>
+                        </label>
+                        <input type="text" id="supplier-phone" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Địa chỉ</label>
+                        <textarea rows="4" id="supplier-address"></textarea>
+                    </div>
+                </div>
+
+                <div class="form-actions">
+                    <button class="save-btn" id="save-btn"> Lưu</button>
+                    <button class="cancel-btn" id="cancel-btn">Hủy</button>
+                </div>
+            </section>
+        </main>
+
+    </div>
+    <div id="global-footer"></div>
+
+    <script src="../js/main.js"></script>
+    <script type="module" src="./sdetal.js"></script>
+
+</body>
+
+</html>
