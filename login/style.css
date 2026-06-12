@@ -138,14 +138,26 @@ header h2 {
 }
 
 
-@media screen and (max-width: 56.25rem) {
+@media screen and (max-width: 900px) {
+
+    body {
+        overflow: auto;
+    }
 
     .login_container {
-        padding-top: 7rem;
+        padding: 7rem 1.5rem 2rem;
+        align-items: flex-start;
+        min-height: 100dvh;
     }
 
     .input_panel {
-        transform: translateY(-1.5rem);
+        width: 100%;
+    }
+
+    .form-container {
+        width: 100%;
+        max-width: 30rem;
+        margin: 0 auto;
     }
 
     .login-form {
@@ -153,28 +165,54 @@ header h2 {
     }
 }
 
-@media screen and (max-width: 30rem) {
+
+@media screen and (max-width: 600px) {
 
     html {
         font-size: 14px;
     }
 
     header {
-        padding:
-            1rem 1.2rem;
+        padding: 1rem 1.2rem;
     }
 
     header h2 {
         font-size: 1.3rem;
     }
 
-    .login-form {
-        padding: 2rem 1.5rem;
+    .login_container {
+        padding: 6.5rem 1rem 1.5rem;
+    }
 
-        border-radius: 1.5rem;
+    .form-container {
+        max-width: 100%;
+    }
+
+    .login-form {
+        padding: 2rem 1.25rem;
+        border-radius: 1.2rem;
+        box-shadow: 0 0.75rem 2rem rgba(15, 23, 42, 0.1);
+    }
+
+    .header-text {
+        margin-bottom: 1.5rem;
     }
 
     .header-text h2 {
         font-size: 1.9rem;
+    }
+
+    .input input {
+        padding: 0.9rem 1rem;
+        border-radius: 0.8rem;
+    }
+
+    .submitbtn {
+        margin-top: 1.25rem;
+    }
+
+    .btn-login {
+        padding: 0.9rem;
+        border-radius: 0.8rem;
     }
 }

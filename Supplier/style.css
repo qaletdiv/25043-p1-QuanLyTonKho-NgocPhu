@@ -297,37 +297,139 @@ body{
 }
 
 
-@media screen and (max-width:900px){
 
-    .sidebar{
-        display:none;
+@media screen and (max-width: 900px) {
+
+    /* Header */
+    .global-header {
+        padding: 0 1.2rem;
     }
 
-    .main-content{
-        margin-left:0;
-        padding:1.2rem;
+    .header-mid h2 {
+        font-size: 1.4rem;
     }
 
-    .topbar{
-        flex-direction:column;
-        gap:1rem;
+    /* Sidebar */
+    .sidebar {
+        display: none;
     }
 
-    .action-bar{
-        flex-direction:column;
-        align-items:stretch;
+    /* Main */
+    .main-content {
+        margin-left: 0;
+        padding: 1.2rem;
     }
 
-    .search-group{
-        flex-direction:column;
+    .topbar {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 1rem;
     }
 
-    .search-group input{
-        width:100%;
+    .user-menu {
+        align-self: flex-end;
+    }
+
+    /* Action bar */
+    .action-bar {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 1rem;
+    }
+
+    .search-group {
+        flex-direction: row;
+        flex-wrap: wrap;
+    }
+
+    .search-group input {
+        flex: 1;
+        width: auto;
+        min-width: 160px;
+    }
+
+    #search-btn {
+        flex-shrink: 0;
+    }
+
+    .create-btn {
+        width: 100%;
+    }
+
+    /* Table: ẩn cột Địa chỉ */
+    .data-table th:nth-child(4),
+    .data-table td:nth-child(4) {
+        display: none;
+    }
+}
+
+
+
+@media screen and (max-width: 600px) {
+
+    /* Header */
+    .global-header {
+        padding: 0 0.8rem;
+        height: 3.2rem;
+    }
+
+    .header-mid {
+
+        position: static;
+        transform: none;
+        flex: 1;
+        text-align: center;
+    }
+
+    .header-mid h2 {
+        font-size: 1.1rem;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    /* Main */
+    .main-content {
+        padding: 0.8rem;
+    }
+
+    .topbar h1 {
+        font-size: 1.4rem;
+    }
+
+    .topbar p {
+        font-size: 0.875rem;
+    }
+
+    /* Action bar */
+    .search-group {
+        flex-direction: column;
+    }
+
+    .search-group input {
+        width: 100%;
     }
 
     #search-btn,
-    .create-btn{
-        width:100%;
+    .create-btn {
+        width: 100%;
+    }
+
+    /* Card */
+    .card {
+        padding: 1rem;
+        border-radius: 16px;
+    }
+
+    /* Table: ẩn thêm cột Số điện thoại */
+    .data-table th:nth-child(3),
+    .data-table td:nth-child(3) {
+        display: none;
+    }
+
+    .data-table th,
+    .data-table td {
+        padding: 0.75rem 0.6rem;
+        font-size: 0.875rem;
     }
 }
