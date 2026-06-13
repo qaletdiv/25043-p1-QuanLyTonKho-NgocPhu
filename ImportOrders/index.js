@@ -318,6 +318,7 @@ confirmBtn.addEventListener('click', () => {
     renderProduct();
     updateButtonStates();
     alert("Xác nhận đơn hàng thành công");
+    window.location.href = "../"
 });
 
 
